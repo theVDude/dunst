@@ -541,6 +541,11 @@ int init_notification(notification * n, int id)
         n->format = format;
         apply_rules(n);
 
+        printf("appname: %s\n", n->appname);
+        printf("summary: %s\n", n->summary);
+        printf("body: %s\n", n->body);
+        printf("id: %d\n", id);
+
         n->msg = string_replace("%a", n->appname, strdup(n->format));
         n->msg = string_replace("%s", n->summary, n->msg);
         n->msg = string_replace("%i", n->icon, n->msg);
