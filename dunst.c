@@ -573,7 +573,6 @@ int init_notification(notification * n, int id)
 
         n->redisplayed = False;
 
-
         dunst_printf(MSG, "%s\n", n->msg);
         dunst_printf(INFO,
                      "{\n  appname: %s\n  summary: %s\n  body: %s\n  icon: %s\n  urgency: %d\n  timeout: %d\n}",
@@ -591,23 +590,24 @@ int init_notification(notification * n, int id)
         return n->id;
 }
 
-
-
-int close_notification(int id) {
+int close_notification(int id)
+{
         l_node *iter;
 
-        for(iter = displayed_notifications->head; iter; iter = iter->next) {
+        for (iter = displayed_notifications->head; iter; iter = iter->next) {
                 notification *n = (notification *) iter->data;
                 if (n->id == id) {
-                        l_move(displayed_notifications, notification_history, iter);
+                        l_move(displayed_notifications, notification_history,
+                               iter);
                         return True;
                 }
         }
 
-        for(iter = notification_queue->head; iter; iter = iter->next) {
+        for (iter = notification_queue->head; iter; iter = iter->next) {
                 notification *n = (notification *) iter->data;
                 if (n->id == id) {
-                        l_move(displayed_notifications, notification_history, iter);
+                        l_move(displayed_notifications, notification_history,
+                               iter);
                         return True;
                 }
         }
@@ -802,7 +802,6 @@ void map_win(void)
 
 void parse_cmdline(int argc, char *argv[])
 {
-
         int c;
         while (1) {
                 static struct option long_options[] = {
@@ -936,7 +935,6 @@ void parse_cmdline(int argc, char *argv[])
 
 static int dunst_ini_get_boolean(const char *value)
 {
-
         switch (value[0]) {
         case 'y':
         case 'Y':
@@ -957,7 +955,6 @@ static int dunst_ini_get_boolean(const char *value)
 
 static rule_t *dunst_rules_find_or_create(const char *section)
 {
-
         l_node *iter;
         rule_t *rule;
 
@@ -982,7 +979,6 @@ static rule_t *dunst_rules_find_or_create(const char *section)
 
 static char *dunst_ini_get_string(const char *value)
 {
-
         char *s;
 
         if (value[0] == '"')
@@ -1000,7 +996,6 @@ static int
 dunst_ini_handle(void *user_data, const char *section,
                  const char *name, const char *value)
 {
-
         if (strcmp(section, "global") == 0) {
                 if (strcmp(name, "font") == 0)
                         font = dunst_ini_get_string(value);
@@ -1100,7 +1095,6 @@ dunst_ini_handle(void *user_data, const char *section,
 
 void parse_dunstrc(void)
 {
-
         char *config_path = NULL;
 
         rules = l_init();
@@ -1148,7 +1142,6 @@ void parse_cmdline_for_config_file(int argc, char *argv[])
 
 int main(int argc, char *argv[])
 {
-
         now = time(&now);
         dc = initdc();
         geometry.mask = XParseGeometry(geom,
