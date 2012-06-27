@@ -280,6 +280,7 @@ void draw_win(void)
         l_node *iter;
         notification *data;
         char hidden[128];
+        char m_out[128];
         ColorSet *hidden_colors = colors[NORM];
         dc->x = 0;
         dc->y = 0;
@@ -294,7 +295,9 @@ void draw_win(void)
 
         if (indicate_hidden && !l_is_empty(notification_queue)) {
                 sprintf(hidden, "(%d more)", l_length(notification_queue));
-                height++;
+                if (geometry.h > 1) {
+                        height++;
+                }
         }
 
         /*
@@ -322,7 +325,12 @@ void draw_win(void)
                         /* we also have the "(x more)" message into account */
                         if (indicate_hidden
                             && !l_is_empty(displayed_notifications)) {
-                                width = MAX(width, textw(dc, hidden));
+                                if (geometry.h == 1) {
+                                        sprintf(m_out,"%s %s",data->msg,hidden);
+                                        width = MAX(width, textw(dc, m_out));
+                                } else {
+                                        width = MAX(width, textw(dc, hidden));
+                                }
                         }
 
                 } else {
@@ -358,7 +366,12 @@ void draw_win(void)
                 data = (notification *) iter->data;
 
                 drawrect(dc, 0, dc->y, width, font_h, True, data->colors->BG);
-                drawtext(dc, data->msg, data->colors);
+                if (indicate_hidden && !l_is_empty(notification_queue)
+                    && geometry.h == 1) {
+                        drawtext(dc, m_out, data->colors);
+                } else {
+                        drawtext(dc, data->msg, data->colors);
+                }
                 dc->y += font_h;
 
                 /* the "(x more)" message should have the same BG-color as
