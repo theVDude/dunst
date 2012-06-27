@@ -391,7 +391,8 @@ void draw_win(void)
         }
 
         /* actually draw the "(x more)" message */
-        if (indicate_hidden && !l_is_empty(notification_queue)) {
+        if (indicate_hidden && !l_is_empty(notification_queue)
+            && geometry.h > 1) {
                 drawrect(dc, 0, dc->y, width, font_h, True, hidden_colors->BG);
 
                 drawtext(dc, hidden, hidden_colors);
